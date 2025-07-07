@@ -75,8 +75,8 @@ public class Categorycon {
     @PutMapping("/category/{id}/update")
     public ResponseEntity<ApiResponse> updateCategoryById(@RequestBody Category category, @PathVariable Long id) {
         try {
-            Category updatedData = categoryService.updateCategory(category,id);
-            return ResponseEntity.ok().body(new ApiResponse("updated Successfully", null));
+            Category newUpdatedData = categoryService.updateCategory(category,id);
+            return ResponseEntity.ok().body(new ApiResponse("updated Successfully", newUpdatedData));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
