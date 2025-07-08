@@ -90,7 +90,7 @@ public class ProductController {
      * getAllProduct
      * deleteById
      * findByproductName - Done
-     * updateproduct - Done
+     * updateProduct - Done
      * getProductByCategory - Done
      * getProductByCategoryAndBrand - Done
      * getProductByBrand - Done
@@ -158,7 +158,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/{brand}/{name}/product")
+    @GetMapping("/product/brand/{brand}/name/{name}/count")
     public ResponseEntity<ApiResponse> countProductsByBrandAndName(@PathVariable String brand,
             @PathVariable String name) {
         try {

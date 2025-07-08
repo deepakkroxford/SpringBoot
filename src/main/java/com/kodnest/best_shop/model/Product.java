@@ -20,7 +20,7 @@ public class Product {
     private BigDecimal price;
     private  int inventory;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="category_id")
     private  Category category;
 
