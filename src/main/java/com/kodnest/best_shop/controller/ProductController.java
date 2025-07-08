@@ -1,6 +1,7 @@
 package com.kodnest.best_shop.controller;
 
 import com.kodnest.best_shop.model.Product;
+import com.kodnest.best_shop.repository.ImageRepository;
 import com.kodnest.best_shop.request.AddProductRequest;
 import com.kodnest.best_shop.request.ProductUpdateRequest;
 import com.kodnest.best_shop.response.ApiResponse;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,8 +64,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> findProductByName(@PathVariable String name) {
         try {
             List<Product> productByName = productService.getProductByName(name);
-            if(productByName.isEmpty()) {
-                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("no data is found", null));
+            if (productByName.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("no data is found", null));
             } else {
                 return ResponseEntity.ok().body(new ApiResponse("success", productByName));
             }

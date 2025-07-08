@@ -4,6 +4,7 @@ import com.kodnest.best_shop.exceptions.ProductNotFoundException;
 import com.kodnest.best_shop.model.Category;
 import com.kodnest.best_shop.model.Product;
 import com.kodnest.best_shop.repository.CategoryRepository;
+import com.kodnest.best_shop.repository.ImageRepository;
 import com.kodnest.best_shop.repository.ProductRepository;
 import com.kodnest.best_shop.request.AddProductRequest;
 import com.kodnest.best_shop.request.ProductUpdateRequest;
@@ -20,6 +21,8 @@ public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    // private final ModelMapper modelMapper;
+    // private final ImageRepository imageRepository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -127,4 +130,51 @@ public class ProductService implements IProductService{
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand,name);
     }
+
+     /**
+     * Here we are using the model mapper -> So the model mapper is a java library
+     * that help us to map one object into the other object. give give
+     * 
+     * Imagine you have two class Product and ProductDTO
+     * 
+     * class Product {
+     *     private Long id;
+     *     private String name;
+     *     private double price;
+     *     // getters and setters
+     * }
+     * 
+     * class ProductDto {
+     *     private Long id;
+     *     private String name;
+     *     private double price;
+     *     // getters and setters
+     * }
+     * 
+     * Instead of manually copying each field like this:
+     * 
+     * ProductDto dto = new ProductDto();
+     * dto.setId(product.getId());
+     * dto.setName(product.getName());
+     * dto.setPrice(product.getPrice());
+     * 
+     * 
+     * You can use ModelMapper to do it in one line:
+     * ProductDto dto = modelMapper.map(product, ProductDto.class);
+     * 
+     * 
+     */
+
+    /**
+     * @Override
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+        productDto.setImages(imageDtos);
+        return productDto;
+    }
+     */
 }
