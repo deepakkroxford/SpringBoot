@@ -1,7 +1,10 @@
 package com.kodnest.best_shop.service.product;
 
+import com.kodnest.best_shop.dto.ImageDto;
+import com.kodnest.best_shop.dto.ProductDto;
 import com.kodnest.best_shop.exceptions.ProductNotFoundException;
 import com.kodnest.best_shop.model.Category;
+import com.kodnest.best_shop.model.Image;
 import com.kodnest.best_shop.model.Product;
 import com.kodnest.best_shop.repository.CategoryRepository;
 import com.kodnest.best_shop.repository.ImageRepository;
@@ -22,7 +25,7 @@ public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     // private final ModelMapper modelMapper;
-    // private final ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -145,10 +148,10 @@ public class ProductService implements IProductService{
      * }
      * 
      * class ProductDto {
-     *     private Long id;
-     *     private String name;
-     *     private double price;
-     *     // getters and setters
+     *  private Long id;
+     * private String name;
+     * private double price;
+     * // getters and setters
      * }
      * 
      * Instead of manually copying each field like this:
@@ -166,15 +169,58 @@ public class ProductService implements IProductService{
      */
 
     /**
-     * @Override
+     * @Override public ProductDto convertToDto(Product product) {
+     * ProductDto productDto = modelMapper.map(product, ProductDto.class);
+     * List<Image> images = imageRepository.findByProductId(product.getId());
+     * List<ImageDto> imageDtos = images.stream()
+     * .map(image -> modelMapper.map(image, ImageDto.class))
+     * .toList();
+     * productDto.setImages(imageDtos);
+     * return productDto;
+     * }
+     */
+
+    @Override
+    public List<ProductDto> getConvertProducts(List<Product> products) {
+        return products.stream().map(this::convertToDto).toList();
+    }
+
+
+    @Override
     public ProductDto convertToDto(Product product) {
-        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        ProductDto productDto = new ProductDto();
+
+        // Set basic product fields
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setBrand(product.getBrand());
+        productDto.setPrice(product.getPrice());
+        productDto.setInventory(product.getInventory());
+        productDto.setDescription(product.getDescription());
+        productDto.setCategory(product.getCategory());
+
+        /**
+         * Model mapper is not working .. if i can use the model mapper so our boiler
+         * code will reduce...
+         */
+
+        // Get images by product ID
         List<Image> images = imageRepository.findByProductId(product.getId());
-        List<ImageDto> imageDtos = images.stream()
-                .map(image -> modelMapper.map(image, ImageDto.class))
-                .toList();
+
+        // Manually map Image -> ImageDto
+        List<ImageDto> imageDtos = images.stream().map(image -> {
+            ImageDto dto = new ImageDto();
+            dto.setImageId(image.getId());
+            dto.setImageName(image.getFileName());
+            dto.setDownloadUrl(image.getDownloadUrl());
+            return dto;
+        }).toList();
+
+        // Set imageDtos into productDto
         productDto.setImages(imageDtos);
+
         return productDto;
     }
-     */
+
+
 }

@@ -1,5 +1,6 @@
 package com.kodnest.best_shop.service.product;
 
+import com.kodnest.best_shop.dto.ProductDto;
 import com.kodnest.best_shop.model.Product;
 import com.kodnest.best_shop.request.AddProductRequest;
 import com.kodnest.best_shop.request.ProductUpdateRequest;
@@ -18,4 +19,8 @@ public interface IProductService {
    List<Product> getProductByName(String productName);
    List<Product> getProductByBrandAndName(String brand, String name);
    Long countProductsByBrandAndName(String brand, String name);
+
+   List<ProductDto> getConvertProducts(List<Product> products);
+
+   ProductDto convertToDto(Product product);
 }
