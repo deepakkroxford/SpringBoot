@@ -1,38 +1,44 @@
 package com.kodnest.best_shop.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Data
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount= BigDecimal.ZERO;;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
-    private Set<CartItem> cartItem;
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Set<CartItem> items = new HashSet<>();
 
     public void addItem(CartItem item) {
-        this.cartItem.add(item);
+        this.items.add(item);
         item.setCart(this);
         updateTotalAmount();
     }
+    @Version // 👈 ADD THIS
+    private Long version;
 
     public void removeItem(CartItem item) {
-        this.cartItem.remove(item);
+        this.items.remove(item);
         item.setCart(null);
         updateTotalAmount();
     }
 
     private void updateTotalAmount() {
-        Arrays items;
-        this.totalAmount = cartItem.stream().map(item -> {
+        this.totalAmount = items.stream().map(item -> {
             BigDecimal unitPrice = item.getUnitPrice();
             if (unitPrice == null) {
                 return  BigDecimal.ZERO;
