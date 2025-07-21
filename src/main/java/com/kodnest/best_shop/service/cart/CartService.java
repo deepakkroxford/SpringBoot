@@ -57,4 +57,9 @@ public class CartService implements ICartService {
         Cart savedCart = cartRepository.save(cart); // no merge, just save
         return savedCart.getId();
     }
+
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
 }

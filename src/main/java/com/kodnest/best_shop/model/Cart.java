@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import com.kodnest.best_shop.model.User;
 
 
 @Getter
@@ -22,6 +23,13 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<CartItem> items = new HashSet<>();
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+
 
     public void addItem(CartItem item) {
         this.items.add(item);
