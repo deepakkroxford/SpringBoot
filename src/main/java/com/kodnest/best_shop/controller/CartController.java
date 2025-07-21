@@ -17,10 +17,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartController {
     private final ICartService cartService;
 
-    @GetMapping("/cart/{cardIds}")
-    public ResponseEntity<ApiResponse> getCartBrother(@PathVariable Long cartIds) {
+    @GetMapping("/cart/{Id}")
+    public ResponseEntity<ApiResponse> getCartById(@PathVariable Long Id) {
         try {
-            Cart cart = cartService.getCart(cartIds);
+            Cart cart = cartService.getCart(Id);
             return ResponseEntity.ok().body(new ApiResponse("Success", cart));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -35,7 +35,6 @@ public class CartController {
         }catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
-
     }
 
     @GetMapping("/{cartId}/totalPrice")
@@ -47,7 +46,4 @@ public class CartController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
-
-
-
 }
