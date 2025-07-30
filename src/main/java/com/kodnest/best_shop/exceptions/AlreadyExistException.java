@@ -1,6 +1,5 @@
 package com.kodnest.best_shop.exceptions;
-
-public class AlreadyExistException extends Exception{
+public class AlreadyExistException extends RuntimeException {
     public AlreadyExistException(String message) {
         super(message);
     }
